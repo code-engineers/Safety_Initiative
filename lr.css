@@ -1,0 +1,276 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+body {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  background: linear-gradient(135deg, #71b7e6, #9b59b6);
+  overflow: auto;
+  margin-top: 60px; /* Adjust this value based on the height of your navbar */
+}
+.container {
+  max-width: 500px;
+  width: 100%;
+  max-height: 90vh;
+  background-color: #fff;
+  padding: 25px 30px;
+  border-radius: 5px;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
+  overflow-y: auto;
+}
+.container .title {
+  font-size: 25px;
+  font-weight: 500;
+  position: relative;
+}
+.container .title::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 3px;
+  width: 30px;
+  border-radius: 5px;
+  background: linear-gradient(135deg, #71b7e6, #9b59b6);
+}
+.content form .user-details {
+  display: flex;
+  flex-direction: column;
+  margin: 20px 0 12px 0;
+}
+form .user-details .input-box {
+  margin-bottom: 15px;
+  width: 100%;
+}
+form .input-box span.details {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 5px;
+}
+.user-details .input-box input {
+  height: 45px;
+  width: 100%;
+  outline: none;
+  font-size: 16px;
+  border-radius: 5px;
+  padding-left: 15px;
+  border: 1px solid #ccc;
+  border-bottom-width: 2px;
+  transition: all 0.3s ease;
+}
+.user-details .input-box input:focus,
+.user-details .input-box input:valid {
+  border-color: #9b59b6;
+}
+form .button {
+  height: 45px;
+  margin: 35px 0;
+}
+form .button button {
+  height: 100%;
+  width: 100%;
+  border-radius: 5px;
+  border: none;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: linear-gradient(135deg, #71b7e6, #9b59b6);
+}
+form .button button:hover {
+  background: linear-gradient(-135deg, #71b7e6, #9b59b6);
+}
+.password-box {
+    position: relative;
+}
+.password-box input {
+    padding-right: 40px;
+}
+.password-box i {
+    position: absolute;
+    top: 40%;
+    right: 15px;
+    transform: translateY(50%);
+    cursor: pointer;
+    font-size: 20px;
+    color: #9b59b6;
+}
+.forg_pass {
+    text-align: right;
+    margin-top: 0px;
+}
+.forg_pass a {
+    color: black;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+}
+.forg_pass a:hover {
+    text-decoration: underline;
+    color: #333;
+}
+.navbar {
+    width: 100%;
+    background: transparent;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+.navbar-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+.navbar-logo a {
+    font-size: 24px;
+    font-weight: 600;
+    color: #fff;
+    text-decoration: none;
+}
+.navbar-menu {
+    list-style: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+    /* transition: max-height 0.5s ease; 
+    overflow: hidden; */
+    max-height: none; /* Start with height 0 */
+    align-items: flex-start;
+    overflow: visible;
+}
+.navbar-menu li {
+    margin: 0 15px;
+    position: relative;
+    width: 100%;
+}
+.navbar-menu a {
+    color: #f9f9f9;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 10px 20px;
+    display: block;
+    position: relative;
+    z-index: 1;
+    text-align: left;
+    transition: color 0.3s ease;
+    width: 100%;
+}
+.navbar-menu a:hover {
+    color: #000000;
+}
+.navbar-menu li::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    background: #fff;
+    border-radius: 5px;
+    transform: translate(-50%, -50%) scale(0);
+    transition: transform 0.3s ease;
+    z-index: 0;
+}
+.navbar-menu li:hover::before {
+    transform: translate(-50%, -50%) scale(1);
+}
+.navbar-menu-icon {
+  display: none;
+  font-size: 28px;
+  cursor: pointer;
+  color: #fff;
+
+  
+}
+@media (max-width: 768px) {
+    .navbar-menu {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        background-color: #b2a2ed;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        transition: max-height 0.3s ease; /* Smooth slide down transition */
+        max-height: 0px; /* Start with height 0 for slide down effect */
+        overflow: hidden;
+    }
+    .navbar-menu.active {
+        display: flex;
+        max-height: 300px;
+    }
+    .navbar-menu li {
+        margin: 0;
+        text-align: center;
+    }
+    .navbar-menu li::before {
+        display: none;
+    }
+    .navbar-menu a {
+        padding: 10px 0;
+        color: #000000;
+        transition: background-color 0.3s ease;
+    }
+    .navbar-menu a:hover {
+        background-color: #444;
+    }
+    .navbar-menu-icon {
+        display: block;
+    }
+}
+@media(max-width: 584px) {
+  .container {
+    max-width: 100%;
+  }
+  form .user-details .input-box {
+    margin-bottom: 15px;
+    width: 100%;
+  }
+  .content form .user-details {
+    max-height: 300px;
+    overflow-y: scroll;
+  }
+  .user-details::-webkit-scrollbar {
+    width: 5px;
+  }
+}
+@media(max-width: 459px) {
+  .container .content .category {
+    flex-direction: column;
+  }
+}
+
+/* Style for select elements to match input fields */
+.user-details .input-box select {
+  height: 45px;
+  width: 100%;
+  outline: none;
+  font-size: 16px;
+  border-radius: 5px;
+  padding: 0 15px; /* Adjust padding for select box */
+  border: 1px solid #ccc;
+  border-bottom-width: 2px;
+  transition: all 0.3s ease;
+}
+
+/* Focus state for select elements */
+.user-details .input-box select:focus {
+  border-color: #9b59b6;
+}
