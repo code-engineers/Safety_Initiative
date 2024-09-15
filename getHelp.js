@@ -162,12 +162,14 @@ function validateContact(contact) {
 }
 
 // Handle form submission
+// Handle form submission
 document.getElementById('submitRequestBtn').addEventListener('click', async () => {
     const description = document.getElementById('description').value;
     const city = document.getElementById('citySelect').value;
     const state = document.getElementById('stateSelect').value;
     const contact = document.getElementById('contact').value;
     const gender = document.getElementById('gender').value;
+    const email = document.getElementById('email').value;  // Get email from input
     const status = 'pending';
     const timestamp = Timestamp.fromDate(new Date());
 
@@ -179,8 +181,7 @@ document.getElementById('submitRequestBtn').addEventListener('click', async () =
     }
     const { latitude: lat, longitude: lng } = position;
 
-    const user = auth.currentUser;
-    const userId = user ? user.uid : 'anonymous';
+    const userId = 'anonymous';  // Keeping userId as 'anonymous' if no authentication
 
     if (!validateContact(contact)) {
         document.getElementById('contactError').style.display = 'block';
@@ -196,6 +197,7 @@ document.getElementById('submitRequestBtn').addEventListener('click', async () =
             state,
             gender,
             contact,
+            email,  // Store email in Firestore
             status,
             timestamp,
             userId,
@@ -212,6 +214,7 @@ document.getElementById('submitRequestBtn').addEventListener('click', async () =
     }
 });
 
+// Function to show alert messages
 // Function to show alert messages
 function showAlert(message, type) {
     const alertBox = document.createElement('div');
