@@ -1,6 +1,11 @@
 import { auth, db } from './firebase.js';
-import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js';
+import { onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js';
 import { getDoc, doc, getDocs, collection, query, where, updateDoc } from 'https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js';
+
+// Initialize EmailJS
+(function() {
+    emailjs.init("fD-o5PaC1ewfFYIGL"); // Your EmailJS user ID
+})();
 
 // Haversine distance function
 function haversineDistance(lat1, lon1, lat2, lon2) {
@@ -94,6 +99,13 @@ async function displayPendingRequests(userCity) {
                 request.location.lat,
                 request.location.lng
             );
+
+            // Check and log timestamp data
+            if (request.timestamp) {
+                console.log('Timestamp Data:', request.timestamp); // Debug logging
+            } else {
+                console.error('Timestamp is missing for request ID:', request.id);
+            }
         });
 
         requests.sort((a, b) => a.distance - b.distance);
@@ -109,7 +121,7 @@ async function displayPendingRequests(userCity) {
                 <td>${request.city || 'N/A'}</td>
                 <td>${request.description || 'N/A'}</td>
                 <td>${request.contact || 'N/A'}</td>
-                <td>${new Date(request.timestamp.seconds * 1000).toLocaleString() || 'N/A'}</td>
+                <td>${request.timestamp ? new Date(request.timestamp.seconds * 1000).toLocaleString() : 'N/A'}</td>
                 <td id="status-${request.id}">${request.status || 'N/A'}</td>
                 <td>
                     <button class="btn btn-success mark-completed-btn" data-id="${request.id}">Mark as Completed</button>
@@ -131,14 +143,36 @@ async function displayPendingRequests(userCity) {
     }
 }
 
-// Function to mark a request as completed
+// Function to mark a request as completed and send an email
 async function markAsCompleted(requestId) {
     try {
         const requestRef = doc(db, 'helpRequests', requestId);
+        const requestSnap = await getDoc(requestRef);
+        
+        if (!requestSnap.exists()) {
+            console.log('Request not found.');
+            return;
+        }
+
+        const requestData = requestSnap.data();
         await updateDoc(requestRef, {
             status: 'Completed'
         });
         console.log(`Request ${requestId} marked as completed.`);
+
+        // Send email
+        const emailParams = {
+            to_email: requestData.email, // Assuming the contact field contains the email
+            subject: 'Help Request Completed',
+            message: `Your help request with ID ${requestId} has been marked as completed. Thank you for using Safety Initiative!`
+        };
+
+        emailjs.send('service_aatvjah', 'template_e7j0df5', emailParams)
+            .then(response => {
+                console.log('Email sent successfully:', response);
+            }, error => {
+                console.error('Error sending email:', error);
+            });
 
         // Update the status in the UI
         document.getElementById(`status-${requestId}`).textContent = 'Completed';
@@ -174,20 +208,15 @@ onAuthStateChanged(auth, async (user) => {
         window.location.href = 'login.html'; // Redirect to login page if not authenticated
     }
 });
-import { signOut } from 'https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js';
 
 // Function to handle logout
 function handleLogout() {
     signOut(auth).then(() => {
         console.log('User signed out.');
-        window.location.href = 'login.html'; // Redirect to the login page
+        window.location.href = 'index.html'; // Redirect to home page
     }).catch((error) => {
-        console.error('Error during sign out:', error);
+        console.error('Error signing out:', error);
     });
 }
 
-// Add event listener to the logout link
-document.getElementById('logoutLink').addEventListener('click', (event) => {
-    event.preventDefault(); // Prevent the default link behavior
-    handleLogout(); // Call the logout function
-});
+document.getElementById('logoutLink').addEventListener('click', handleLogout);
